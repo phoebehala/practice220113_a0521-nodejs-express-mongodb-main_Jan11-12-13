@@ -3,7 +3,7 @@
     <%- include('../includes/nav.ejs') %>
 
     <main class="container mt-6">
-        <h1 class="title">Home Page</h1>
+        <h1 class="title">Admin Page</h1>
 
         <% if(products.length > 0) { %>
             <div class="columns is-4 m-4">
@@ -12,7 +12,7 @@
                         <div class="card">
                             <div class="card-image">
                                 <figure class="image is-4by3">    
-                                    <img src="<%= product.imageUrl %>" alt="<%= product.title%>" width="100px" /> 
+                                    <img src="http://localhost:8000/<%= product.imageUrl %>" alt="<%= product.title%>" width="100px" /> 
                                 </figure>
                             </div>
                             <div class="card-content">
@@ -29,13 +29,15 @@
                             </div>
                             <footer class="card-footer">
                                 <a class="card-footer-item" href="/products/<%= product._id %>" >Details</a>
-                                <form action="/cart" method="POST">
+
+                                <!-- only for admins to see -->
+                                <a class="card-footer-item" href="/admin/edit-product/<%= product._id %>?edit=true">Edit</a>
+                                <form action="/admin/delete-product" method="POST">
                                     <input type="hidden" name="productId" value="<%= product._id %>" />
-                                    <input type="hidden" name="productPrice" value="<%= product.price %>" />
-                                    <a class="card-footer-item" href="#" onclick="this.closest('form').submit();return false;">Add to Cart</a>              
+                                    <a class="card-footer-item" href="#" onclick="this.closest('form').submit();return false;">Delete</a>              
+                                    <!-- <button class="card-footer-item" type="submit">Delete</button> -->
                                 </form>
-                               
-                               
+                                <!-- only for admins to see -->
                             </footer>
                         </div>
                     </div>

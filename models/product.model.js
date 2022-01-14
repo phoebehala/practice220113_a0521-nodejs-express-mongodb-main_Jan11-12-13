@@ -47,13 +47,18 @@ module.exports = class Products {
     static fetchAll(){
         // return db.execute('SELECT * FROM products')
         const db = getDB()
+
+        // returns >>> Promise { <pending> }
         return db.collection('products').find().toArray()   // .toArray() >>> convert to an array
+    
     }
 
     static findById(id) {
         // return db.execute('SELECT * FROM products WHERE products.id = ?', [id])
         const db = getDB()
         const objectId = new mongodb.ObjectId(id)  // convert string id to mongoDB id
+
+        // returns promise
         return db.collection('products').find({ _id: objectId }).next()
     }
 }
