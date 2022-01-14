@@ -7,7 +7,7 @@ const cartPath = path.join(path.dirname(process.mainModule.filename), 'data', 'c
 
 module.exports = class Cart{
 
-    static getCart(callback){
+    static getCart(callback){ // to fire callback as long as there is no error
         fs.readFile(cartPath, (err, content)=>{
             const cart = JSON.parse(content)  // pasrse json file to js obj
             console.log('cart model: ',cart)
@@ -16,17 +16,22 @@ module.exports = class Cart{
                 console.log(err)
                 callback(null)
             }else{
-                callback(cart) 
+                callback(cart)
             }
         })
     }
 
     static addProduct(id, price){
         fs.readFile(cartPath, (err, content)=>{
-            let cart = {
-                products: [],
-                totalPrice: 0
+            let cart
+            /*
+            let cart ={
+                "products": [
+                    
+                ],
+                "totalPrice": 0
             }
+            */
 
             if(!err){
                 cart = JSON.parse(content)  // pasrse json file to js obj
@@ -41,22 +46,19 @@ module.exports = class Cart{
 
             let updatedProduct
 
-            if (existingProduct){
-                updatedProduct = {...existingProduct}   // copy all the properties of the updatedProduct
+            if (existingProduct){ // to add the quantitiy by 1
+                updatedProduct = {...existingProduct}   // copy all the properties of the existingProduct
                 updatedProduct.quantity = updatedProduct.quantity+1  // revise the quantity property of it  //updatedProduct.quantity++ 
 
                 cart.products=[...cart.products] // spreading out the cart with updated one
                 cart.products[existingProductIndex] = updatedProduct  // replace this product with what we just updated
             }else{ // there is no existingProduct in the cart right now
-                updatedProduct = { id, quantity:1 }
+                updatedProduct = { id, quantity:1 }  // create an object for the item we first add into cart
                 cart.products = [...cart.products, updatedProduct]
-
-                cart.products=[...cart.products] // spreading out the cart with updated one
-                cart.products.push(updatedProduct) 
             
             }
 
-            cart.totalPrice = cart.totalPrice + price
+            cart.totalPrice = cart.totalPrice +  parseInt(price)
             
             // .writeFile() >>> will override data if the file has been existed 
             // .writeFile() >>> async
@@ -65,10 +67,6 @@ module.exports = class Cart{
             // JSON.stringify(cart,null,4) >>> the file indentation , 4>>> how many space to indentate
             fs.writeFile(cartPath, JSON.stringify(cart,null,4), err =>{ console.log(err);})
         })
-
-        
-         
-
             
     }
 

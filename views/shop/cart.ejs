@@ -4,32 +4,40 @@
 
     <main class="container mt-6">
         <h1 class="title">Cart Page</h1>
+
         <% if(products.length > 0) { %>
-            <div class="columns is-4 m-4">
+        <table class="table is-fullwidth">
+            <thead>
+                <tr>
+                  <th></th>
+                  <th>Title</th>
+                  <th>Quantity </th>
+                  <th>Price</th>
+                  <th></th>
+                </tr>
+              </thead>
+            <tbody>
                 <% for(let product of products) { %>
-                    <div class="column is-one-quarter">
-                        <div class="card">
-                            <div class="card-content">
-                                <div class="media">
-                                    <div class="media-left">
-                                        <div class="media-content">
-                                            <!-- <p class="title is-4"><%= product.title%></p>
-                                            <p class="subtitle is-6">$<%= product.price %></p> -->
-                                            <p class="subtitle is-6">Quantity: <%= product.quantity %></p> 
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <footer class="card-footer">
-                                <form action="/cart-delete-item" method="POST">
-                                    <input type="hidden" name="productId" value="<%= product.productData.id %>" />
-                                    <a class="card-footer-item" href="#" onclick="this.closest('form').submit();return false;" >Delete</a>
-                                </form>
-                            </footer>
-                        </div>
-                    </div>
+                <tr>
+                    <td>
+                        <figure class="image is-4by3">
+                            <img src="<%= product.productData.imageUrl%>">
+                          </figure>
+                    </td>
+                    <td><%= product.productData.title%></p></td>
+                    <td><p class="subtitle is-6"><%= product.quantity %></p> </td>
+                    <td>$<%= product.productData.price %></p></td>
+                    <td class="has-text-right">
+                        <form action="/cart-delete-item" method="POST">
+                            <input type="hidden" name="productId" value="<%= product.productData._id %>" />
+                            <button class="button is-danger is-light" type="submit">Delete</button>
+                        </form>
+                    </td>
+                </tr>
                 <% } %>
-            </div>
+                <tr><td colspan="5" class="has-text-right"><h2 class="subtitle mt-6">Total Price: $<%= totalPrice  %> </h2></td></tr>
+            </tbody>
+        </table>
         <% } else { %>
             <h1 class="title">No Cart Items Found!</h1>
         <% } %>

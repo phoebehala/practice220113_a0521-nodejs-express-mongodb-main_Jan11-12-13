@@ -18,9 +18,11 @@ exports.getProducts = (req,res,next) => {
     // to ask model to interact with db 
     Products.fetchAll().then((products) => {
         console.log('prod: ', products);
+        const tempProducts = products.map(p => ({ ...p, description: `${p.description.slice(0, 25)}...` })) // ...p >>> to copy all the properties of a product   ; description: `${p.description.slice(0, 25)}...` >>> override the value of description property 
+        
         res.render('shop/product-list', {
             pageTitle: 'All Products',
-            products: products
+            products: tempProducts
         })
 
 
@@ -73,10 +75,10 @@ exports.getCart = (req, res, next) =>{
                 //console.log('cartProductData', cartProductData);
 
                 if (cartProductData){
-                    // cartProducts.push(cartProductData)
+                   
                     cartProducts.push({
-                        productData:cartProductData,
-                        quantity:cartProductData.quantity
+                        productData:product,
+                        quantity:cartProductData.quantity,
                     })
                 }  
             }
@@ -86,7 +88,8 @@ exports.getCart = (req, res, next) =>{
             // response to views -shop/cart.ejs 
             res.render('shop/cart',{
                 pageTitle: 'Your Cart',
-                products: cartProducts
+                products: cartProducts,
+                totalPrice:cart.totalPrice
             })
 
         }).catch(err => console.log(err))
