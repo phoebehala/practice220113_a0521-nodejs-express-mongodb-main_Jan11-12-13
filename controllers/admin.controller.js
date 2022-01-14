@@ -4,9 +4,12 @@ exports.getAllProducts = (req, res, next) =>{
     // to ask Model to interact with db
     Product.fetchAll()
         .then((products)=>{   // get array of products
+
+            const tempProducts = products.map(p => ({ ...p, description: `${p.description.slice(0, 25)}...` }))
+
             res.render('admin/products', {
                 pageTitle: 'Admin - All Products',
-                products: products
+                products: tempProducts
             })
         }).catch(err => console.log(err))
 }
